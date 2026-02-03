@@ -10,7 +10,7 @@ NAME="$1"
 CONFIG_FILE="$2"
 INIT_NAME="$3"
 C_FILE=${4:-"${NAME}.c"}
-COMMAND="$5"
+COMMAND="${5:-}"
 
 "@out@/bin/prescheme" <<EOF
 (prescheme-compiler
