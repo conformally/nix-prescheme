@@ -1,0 +1,25 @@
+#!/bin/sh
+set -euo pipefail
+
+if [ $# -lt 3 ]; then
+    echo "Usage: preschemec <name> <config file> <init name> [c output name] [command]" >&2
+    exit 1
+fi
+
+NAME="$1"
+CONFIG_FILE="$2"
+INIT_NAME="$3"
+C_FILE=${4:-"${NAME}.c"}
+COMMAND="$5"
+
+"@out@/bin/prescheme" <<EOF
+(prescheme-compiler
+  '$NAME
+  '("$CONFIG_FILE")
+  '$INIT_NAME
+  "$C_FILE"
+  $(if [ -n "$COMMAND" ]; then printf "%s" $COMMAND; fi))
+(exit)
+EOF
+
+"@cc@" -I"@out@/include" $C_FILE -o $NAME -L"@out@/lib" -lprescheme
